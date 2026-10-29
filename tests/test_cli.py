@@ -16,7 +16,7 @@ ROOT = Path(__file__).parents[1]
 
 
 def invoke(*arguments, stdin=None):
-    return subprocess.run([sys.executable, '-m', 'lacuna', *map(str, arguments)], input=stdin, text=True, cwd=ROOT, capture_output=True, timeout=30)
+    return subprocess.run([sys.executable, '-m', 'lacuna', *map(str, arguments)], input=stdin if stdin is not None else '', text=True, cwd=ROOT, capture_output=True, timeout=30)
 
 
 def test_template_schema_and_prompt_are_portable_json():
