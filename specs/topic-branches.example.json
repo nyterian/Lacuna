@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "profile": {
+    "title": "Online clustering with prototype memory",
+    "description": "Locate the research topic Online clustering with prototype memory within the OpenAlex domain, field, subfield and topic hierarchy.",
+    "concept_groups": [
+      [
+        "Online clustering with prototype memory"
+      ]
+    ],
+    "mechanism_groups": [],
+    "seed_titles": [],
+    "targeted_queries": [],
+    "questions": [],
+    "population": [],
+    "methods": [],
+    "geography": [],
+    "excluded_terms": [],
+    "year_from": null,
+    "year_to": 2026,
+    "types": [
+      "article",
+      "conference-paper",
+      "preprint",
+      "review",
+      "dissertation"
+    ],
+    "languages": [],
+    "seed_dois": []
+  },
+  "config": {
+    "analysis_mode": "topic_branches",
+    "branch_max_matches": 3,
+    "branch_sibling_limit": 4,
+    "branch_work_limit": 20,
+    "local_documents_are_theses": false,
+    "gap_max_candidates": 40,
+    "gap_per_study": 6,
+    "gap_follow_up_queries": 3,
+    "sources": [
+      "openalex"
+    ],
+    "per_source": 150,
+    "max_queries": 16,
+    "request_budget": 60,
+    "citation_rounds": 0,
+    "citation_seeds": 3,
+    "max_downloads": 0,
+    "max_pdf_mb": 25,
+    "max_pages": 300,
+    "evidence_per_study": 5,
+    "package_studies": 40,
+    "compact_studies": 12,
+    "oai_url": "",
+    "oai_set": "",
+    "use_cache": true
+  },
+  "inputs": {
+    "pdfs": [],
+    "records": []
+  }
+}

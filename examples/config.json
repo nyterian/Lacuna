@@ -1,0 +1,11 @@
+{
+  "sources": ["openalex", "crossref"],
+  "per_source": 40,
+  "max_queries": 4,
+  "request_budget": 30,
+  "citation_rounds": 1,
+  "citation_seeds": 2,
+  "max_downloads": 2,
+  "package_studies": 25,
+  "compact_studies": 8
+}

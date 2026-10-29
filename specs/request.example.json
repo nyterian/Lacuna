@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "profile": {
+    "title": "Generative AI and critical thinking in students",
+    "description": "Compare empirical studies on how generative AI tools relate to students' critical thinking skills in educational settings.",
+    "concept_groups": [
+      [
+        "generative AI",
+        "generative artificial intelligence",
+        "large language model"
+      ],
+      [
+        "critical thinking",
+        "critical reasoning"
+      ]
+    ],
+    "mechanism_groups": [
+      [
+        "AI literacy",
+        "metacognition"
+      ]
+    ],
+    "seed_titles": [],
+    "targeted_queries": [],
+    "questions": [
+      "How does generative AI use relate to students' critical thinking?"
+    ],
+    "population": [
+      "students",
+      "high school students"
+    ],
+    "methods": [
+      "experiment",
+      "longitudinal"
+    ],
+    "geography": [],
+    "excluded_terms": [],
+    "year_from": null,
+    "year_to": 2026,
+    "types": [
+      "article",
+      "conference-paper",
+      "preprint",
+      "review",
+      "dissertation"
+    ],
+    "languages": [],
+    "seed_dois": []
+  },
+  "config": {
+    "analysis_mode": "related_studies",
+    "branch_max_matches": 3,
+    "branch_sibling_limit": 4,
+    "branch_work_limit": 20,
+    "local_documents_are_theses": false,
+    "gap_max_candidates": 40,
+    "gap_per_study": 6,
+    "gap_follow_up_queries": 3,
+    "sources": [
+      "openalex",
+      "crossref"
+    ],
+    "per_source": 150,
+    "max_queries": 16,
+    "request_budget": 60,
+    "citation_rounds": 1,
+    "citation_seeds": 3,
+    "max_downloads": 5,
+    "max_pdf_mb": 25,
+    "max_pages": 300,
+    "evidence_per_study": 5,
+    "package_studies": 40,
+    "compact_studies": 12,
+    "oai_url": "",
+    "oai_set": "",
+    "use_cache": true
+  },
+  "inputs": {
+    "pdfs": [],
+    "records": []
+  }
+}

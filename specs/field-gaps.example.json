@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "profile": {
+    "title": "online clustering",
+    "description": "Find author-reported limitations, future work, and open questions in theses about online clustering.",
+    "concept_groups": [
+      [
+        "online clustering"
+      ]
+    ],
+    "mechanism_groups": [],
+    "seed_titles": [],
+    "targeted_queries": [
+      "online clustering"
+    ],
+    "questions": [],
+    "population": [],
+    "methods": [],
+    "geography": [],
+    "excluded_terms": [],
+    "year_from": null,
+    "year_to": 2026,
+    "types": [
+      "dissertation"
+    ],
+    "languages": [],
+    "seed_dois": []
+  },
+  "config": {
+    "analysis_mode": "field_gaps",
+    "local_documents_are_theses": false,
+    "gap_max_candidates": 40,
+    "gap_per_study": 6,
+    "gap_follow_up_queries": 3,
+    "sources": [
+      "openalex",
+      "crossref"
+    ],
+    "per_source": 150,
+    "max_queries": 16,
+    "request_budget": 60,
+    "citation_rounds": 0,
+    "citation_seeds": 3,
+    "max_downloads": 5,
+    "max_pdf_mb": 25,
+    "max_pages": 300,
+    "evidence_per_study": 5,
+    "package_studies": 40,
+    "compact_studies": 12,
+    "oai_url": "",
+    "oai_set": "",
+    "use_cache": true
+  },
+  "inputs": {
+    "pdfs": [],
+    "records": []
+  }
+}

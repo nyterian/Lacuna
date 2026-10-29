@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "field-lacuna"
+version = "0.5.0"
+description = "Field specific lacuna identifier: reproducible literature discovery"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = [
+  "streamlit>=1.50,<2", "httpx>=0.27,<1", "pydantic>=2.8,<3",
+  "pandas>=2.2,<4", "scikit-learn>=1.5,<2", "rapidfuzz>=3.9,<4",
+  "pypdf[crypto]>=5,<7", "defusedxml>=0.7,<1", "rich>=13.9,<15", "prompt_toolkit>=3.0.48,<4", "fonttools>=4.50,<5"
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+lacuna = "lacuna.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["lacuna*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

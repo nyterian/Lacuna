@@ -1,0 +1,18 @@
+[
+  {
+    "title": "SYNTHETIC TEST ONLY: Online clustering with prototype memory",
+    "abstract": "This is synthetic demonstration data, not a real thesis. A limitation of online clustering in this demonstration is the fixed memory budget. Future work should evaluate online clustering under recurring concept drift.",
+    "year": 2020,
+    "authors": ["Synthetic fixture"],
+    "type": "dissertation",
+    "language": "en"
+  },
+  {
+    "title": "SYNTHETIC TEST ONLY: Adaptive online clustering",
+    "abstract": "This is synthetic demonstration data, not a real thesis. An open question concerns online clustering with rare emerging clusters. Further research should evaluate noise robustness in online clustering.",
+    "year": 2022,
+    "authors": ["Synthetic fixture"],
+    "type": "dissertation",
+    "language": "en"
+  }
+]

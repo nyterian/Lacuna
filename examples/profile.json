@@ -1,0 +1,47 @@
+{
+  "title": "Generative AI and critical thinking in students",
+  "description": "Compare empirical studies on how generative AI tools relate to students' critical thinking skills in educational settings.",
+  "concept_groups": [
+    [
+      "generative AI",
+      "generative artificial intelligence",
+      "large language model"
+    ],
+    [
+      "critical thinking",
+      "critical reasoning"
+    ]
+  ],
+  "mechanism_groups": [
+    [
+      "AI literacy",
+      "metacognition"
+    ]
+  ],
+  "seed_titles": [],
+  "targeted_queries": [],
+  "questions": [
+    "How does generative AI use relate to students' critical thinking?"
+  ],
+  "population": [
+    "students",
+    "high school students"
+  ],
+  "methods": [
+    "experiment",
+    "longitudinal"
+  ],
+  "geography": [],
+  "excluded_terms": [],
+  "year_from": null,
+  "year_to": 2026,
+  "types": [
+    "article",
+    "conference-paper",
+    "preprint",
+    "review",
+    "dissertation"
+  ],
+  "languages": [],
+  "seed_dois": []
+}

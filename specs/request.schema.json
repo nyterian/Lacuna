@@ -1,0 +1,368 @@
+{
+  "$defs": {
+    "FileInputs": {
+      "additionalProperties": false,
+      "properties": {
+        "pdfs": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Pdfs",
+          "type": "array"
+        },
+        "records": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "title": "Records",
+          "type": "array"
+        }
+      },
+      "title": "FileInputs",
+      "type": "object"
+    },
+    "ResearchProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "maxLength": 500,
+          "minLength": 3,
+          "title": "Title",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 12000,
+          "minLength": 10,
+          "title": "Description",
+          "type": "string"
+        },
+        "concept_groups": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "title": "Concept Groups",
+          "type": "array"
+        },
+        "mechanism_groups": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "maxItems": 12,
+          "title": "Mechanism Groups",
+          "type": "array"
+        },
+        "seed_titles": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Seed Titles",
+          "type": "array"
+        },
+        "targeted_queries": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Targeted Queries",
+          "type": "array"
+        },
+        "questions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Questions",
+          "type": "array"
+        },
+        "population": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Population",
+          "type": "array"
+        },
+        "methods": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Methods",
+          "type": "array"
+        },
+        "geography": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Geography",
+          "type": "array"
+        },
+        "excluded_terms": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Excluded Terms",
+          "type": "array"
+        },
+        "year_from": {
+          "anyOf": [
+            {
+              "maximum": 2100,
+              "minimum": 1500,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Year From"
+        },
+        "year_to": {
+          "default": 2026,
+          "maximum": 2100,
+          "minimum": 1500,
+          "title": "Year To",
+          "type": "integer"
+        },
+        "types": {
+          "items": {
+            "enum": [
+              "article",
+              "conference-paper",
+              "preprint",
+              "review",
+              "dissertation",
+              "other"
+            ],
+            "type": "string"
+          },
+          "title": "Types",
+          "type": "array"
+        },
+        "languages": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Languages",
+          "type": "array"
+        },
+        "seed_dois": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Seed Dois",
+          "type": "array"
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "concept_groups"
+      ],
+      "title": "ResearchProfile",
+      "type": "object"
+    },
+    "RunConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "analysis_mode": {
+          "default": "related_studies",
+          "enum": [
+            "related_studies",
+            "field_gaps",
+            "topic_branches"
+          ],
+          "title": "Analysis Mode",
+          "type": "string"
+        },
+        "branch_max_matches": {
+          "default": 3,
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Branch Max Matches",
+          "type": "integer"
+        },
+        "branch_sibling_limit": {
+          "default": 4,
+          "maximum": 12,
+          "minimum": 0,
+          "title": "Branch Sibling Limit",
+          "type": "integer"
+        },
+        "branch_work_limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Branch Work Limit",
+          "type": "integer"
+        },
+        "local_documents_are_theses": {
+          "default": false,
+          "title": "Local Documents Are Theses",
+          "type": "boolean"
+        },
+        "gap_max_candidates": {
+          "default": 40,
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Gap Max Candidates",
+          "type": "integer"
+        },
+        "gap_per_study": {
+          "default": 6,
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Gap Per Study",
+          "type": "integer"
+        },
+        "gap_follow_up_queries": {
+          "default": 3,
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Gap Follow Up Queries",
+          "type": "integer"
+        },
+        "sources": {
+          "items": {
+            "enum": [
+              "openalex",
+              "crossref",
+              "core",
+              "oai"
+            ],
+            "type": "string"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "per_source": {
+          "default": 150,
+          "maximum": 2000,
+          "minimum": 1,
+          "title": "Per Source",
+          "type": "integer"
+        },
+        "max_queries": {
+          "default": 16,
+          "maximum": 60,
+          "minimum": 1,
+          "title": "Max Queries",
+          "type": "integer"
+        },
+        "request_budget": {
+          "default": 60,
+          "maximum": 500,
+          "minimum": 1,
+          "title": "Request Budget",
+          "type": "integer"
+        },
+        "citation_rounds": {
+          "default": 1,
+          "maximum": 2,
+          "minimum": 0,
+          "title": "Citation Rounds",
+          "type": "integer"
+        },
+        "citation_seeds": {
+          "default": 3,
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Citation Seeds",
+          "type": "integer"
+        },
+        "max_downloads": {
+          "default": 5,
+          "maximum": 50,
+          "minimum": 0,
+          "title": "Max Downloads",
+          "type": "integer"
+        },
+        "max_pdf_mb": {
+          "default": 25,
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Max Pdf Mb",
+          "type": "integer"
+        },
+        "max_pages": {
+          "default": 300,
+          "maximum": 1500,
+          "minimum": 1,
+          "title": "Max Pages",
+          "type": "integer"
+        },
+        "evidence_per_study": {
+          "default": 5,
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Evidence Per Study",
+          "type": "integer"
+        },
+        "package_studies": {
+          "default": 40,
+          "maximum": 200,
+          "minimum": 1,
+          "title": "Package Studies",
+          "type": "integer"
+        },
+        "compact_studies": {
+          "default": 12,
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Compact Studies",
+          "type": "integer"
+        },
+        "oai_url": {
+          "default": "",
+          "title": "Oai Url",
+          "type": "string"
+        },
+        "oai_set": {
+          "default": "",
+          "title": "Oai Set",
+          "type": "string"
+        },
+        "use_cache": {
+          "default": true,
+          "title": "Use Cache",
+          "type": "boolean"
+        }
+      },
+      "title": "RunConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Shared web/terminal contract. Credentials are deliberately excluded.",
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "profile": {
+      "$ref": "#/$defs/ResearchProfile"
+    },
+    "config": {
+      "$ref": "#/$defs/RunConfig"
+    },
+    "inputs": {
+      "$ref": "#/$defs/FileInputs"
+    }
+  },
+  "required": [
+    "profile"
+  ],
+  "title": "ResearchRequest",
+  "type": "object"
+}
