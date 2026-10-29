@@ -84,14 +84,19 @@ cat request.json | lacuna run - --quiet > result-summary.json
 
 `run` writes a JSON summary to stdout. Rich terminal presentation and progress use stderr. `--quiet` suppresses progress entirely. Validation errors are JSON with exit code 2; cancellation uses exit code 130. A completed run can have partial-source warnings: inspect `status`, `warnings`, and `coverage.source_status`.
 
-Each run writes:
+Each run writes one primary attachment into the chosen save folder. Optional files are grouped separately:
 
 ```text
-lacuna_<id>.json              # full structured run result, excluding full PDF text
-lacuna_<id>.request.json      # replayable request, with resolved local input paths
-lacuna_<id>.zip               # full portable research package
-lacuna_<id>_compact.zip       # bounded assistant upload package
+<save-folder>/
+  lacuna_<id>.assistant.md        # send this ONE file to your assistant
+  technical/<id>/
+    lacuna_<id>.json              # full structured run result
+    lacuna_<id>.request.json      # replayable request
+    lacuna_<id>.zip               # optional full archive
+    lacuna_<id>_compact.zip       # optional compact archive
 ```
+
+Choose the folder at the terminal prompt, or pass `--out "~/Downloads/Lacuna"` to `run`, `gaps` or `branches`. User-home notation is expanded. The JSON summary identifies the primary attachment as `artifacts.assistant_document` and reports its absolute path.
 
 Paths in a loaded request are resolved relative to the request file. Paths supplied with `--pdf` or `--records`, interactive entry, or stdin are resolved relative to the working directory. The standalone replay request contains absolute local input paths; ZIP exports intentionally omit those paths and original PDFs.
 
@@ -118,11 +123,13 @@ lacuna web --port 8502
 
 Default URL: http://127.0.0.1:8501. The server binds to localhost.
 
-The near-black interface exposes actual schema field names and four work areas:
+The near-black interface exposes actual schema field names and six work areas:
 
 - **Specification:** form or JSON editor, request validation, template/schema/input-prompt downloads, local uploads, and explicit limits.
 - **Results:** score-first table, filters, evidence excerpts, source identity, dimensions, coverage, and request logs.
-- **Artifacts:** full ZIP, compact ZIP, structured result JSON, and interpretation prompt.
+- **Field gaps:** attributed thesis limitations and future-work candidates.
+- **Topic branches:** taxonomy placement and neighboring topics.
+- **Artifacts:** single-file assistant brief, local save folder, download/copy preview, and optional technical exports.
 - **Runs:** local SQLite history with package regeneration.
 
 The form's **Build request JSON** action creates a terminal-compatible request. The JSON editor accepts pasted assistant output or an uploaded request file. File paths in `inputs` are CLI-only; web users upload the files and leave those lists empty.
@@ -207,7 +214,7 @@ Two English prompts serve different jobs:
 - **INPUT_PROMPT.md:** have your assistant prepare the research request.
 - **ASSISTANT_PROMPT.md:** have your assistant interpret the output and assess possible lacunae with counterevidence.
 
-Upload the ZIP to your own assistant, then send the interpretation prompt. If it cannot read ZIPs, extract files first. The compact package includes a balanced evidence portfolio of N records; catalogue.csv lists every discovered record and selection.json explains the choices; its coverage file still describes the full run. All full-package records retain selected evidence in `studies.json`; only the configured evidence portfolio gets separate Markdown files. Page numbers are physical PDF page positions.
+Upload only `lacuna_<id>.assistant.md` to your assistant, or paste its contents. The interpretation prompt, research profile, coverage, sources and supplied evidence are embedded in this single document. ZIPs also include `SEND_TO_ASSISTANT.md`; the other archive files are optional technical exports. The compact package includes a balanced evidence portfolio of N records; catalogue.csv lists every discovered record and selection.json explains the choices; its coverage file still describes the full run. All full-package records retain selected evidence in `studies.json`; only the configured evidence portfolio gets separate Markdown files. Page numbers are physical PDF page positions.
 
 ## Local data and constraints
 
@@ -279,3 +286,11 @@ The engine searches a bounded sample of publications and groups their primary to
 Solid diagram edges are source taxonomy relationships. The dashed input edge is a suggested placement, not a definitive scientific classification. Topics may have multiple plausible placements. Sample counts are not confidence probabilities. Missing levels, failed requests and empty searches stay explicit; no hierarchy is invented.
 
 CLI trees are printed to stderr and JSON remains on stdout. `--quiet` suppresses presentation. Exported ZIPs and standalone CLI artifacts include `topic_branches.json`, `.md`, `.svg` and `.txt`. JSON and Markdown retain all candidate placements and source evidence; SVG and text default to the first placement. The web selector switches the displayed placement and its SVG download. The portable package includes a matching assistant interpretation prompt.
+
+## Single-file assistant handoff and save folders (0.6.0)
+
+The Artifacts tab defaults to a concise self-contained Markdown brief. Choose Extended brief for a larger detailed evidence portfolio. Both retain all field-gap candidates or topic placements, source references and coverage limitations. The source catalogue lists all discovered records; unselected study abstracts and excerpts are explicitly excluded from the brief. Original PDFs are never embedded. No extra model is required.
+
+Use **Save folder → Save to folder** to write the single brief to a folder on the computer running the local web app. Enter an absolute path or `~/Downloads/Lacuna`; missing folders are created, and repeated saves receive a suffix instead of overwriting earlier exports. Browser downloads follow browser save settings independently. The complete brief is also available in the copyable preview.
+
+Attachment/context limits vary between assistants. The interface shows document size; concise mode reduces the detailed study portfolio but does not silently truncate gap evidence. Long field-gap/source catalogues can still exceed an assistant's context. Technical JSON and ZIP downloads remain optional under their expander.

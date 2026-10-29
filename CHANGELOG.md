@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0
+
+- Make a self-contained assistant Markdown brief the primary export, with embedded instructions, provenance, evidence and coverage.
+- Add web save-folder selection, copy preview, concise/extended briefs and non-overwriting saves.
+- Keep terminal technical exports in a separate subfolder; retain machine-readable artifact paths and optional ZIPs.
+
 ## 0.5.0
 
 - Add source-backed topic branching with alternative taxonomy placements and neighboring topics.

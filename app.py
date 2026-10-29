@@ -13,7 +13,7 @@ from lacuna import APP_NAME, __version__
 from lacuna.models import ResearchRequest, ResearchProfile, RunConfig, RunResult
 from lacuna.pipeline import run_research
 from lacuna.branches import topic_branch_request, branch_svg, branch_tree, tree_lines, branch_report
-from lacuna.export import build_package, ASSISTANT_PROMPT
+from lacuna.export import build_package, ASSISTANT_PROMPT, build_assistant_document, save_assistant_document
 from lacuna.specification import request_template, example_request, input_prompt, parse_request, field_gap_request
 
 ROOT = Path(__file__).resolve().parent
@@ -402,19 +402,35 @@ with gaps_tab:
         st.info("No active field-gap run. Enter a topic above, or load a saved field-gap run from Runs.")
 
 with artifacts_tab:
-    st.subheader("Portable research artifacts")
+    st.subheader("Send one file to your assistant")
     if result is None:
-        st.info("Run a specification to generate ZIP packages and result JSON.")
+        st.info("Complete a run or load a saved run to prepare a single-file research brief.")
     else:
-        a, b, c = st.columns(3)
-        a.download_button("Full package .zip", st.session_state.full_package, f"lacuna_{result.run_id}.zip", "application/zip", type="primary", width="stretch")
-        b.download_button("Compact package .zip", st.session_state.compact_package, f"lacuna_{result.run_id}_compact.zip", "application/zip", width="stretch")
-        c.download_button("Result .json", result.model_dump_json(indent=2), f"lacuna_{result.run_id}.json", "application/json", width="stretch")
-        st.caption(f"Full: {len(result.studies)} records. Separate evidence files: {min(len(result.studies), result.config.package_studies)}. Compact portfolio: {min(len(result.studies), result.config.compact_studies)} records; all records listed in catalogue.csv.")
-    st.download_button("ASSISTANT_PROMPT.md", ASSISTANT_PROMPT, "ASSISTANT_PROMPT.md", "text/markdown")
-    with st.expander("ASSISTANT_PROMPT.md / interpret the output"):
-        st.code(ASSISTANT_PROMPT, language=None)
-    st.caption("Original PDFs and credentials are excluded. Profiles, excerpts, and local filenames may appear in exports. Review before sharing.")
+        brief_size=st.radio("Evidence detail",["Concise brief", "Extended brief"],horizontal=True,help="Both include the prompt, coverage, source catalogue and all field-gap or topic-branch findings. Extended includes a larger study evidence portfolio.")
+        compact_brief=brief_size=="Concise brief"
+        brief=build_assistant_document(result,compact=compact_brief)
+        st.write("Upload this one Markdown file to your assistant, or copy and paste its contents. It includes the interpretation prompt, sources, findings and evidence limitations.")
+        st.caption(f"{len(brief):,} characters · {len(brief.encode('utf-8'))/1024:.1f} KB. Attachment and context limits depend on your assistant; concise mode reduces the detailed study portfolio.")
+        st.download_button("Download assistant brief .md",brief,f"lacuna_{result.run_id}.assistant.md","text/markdown",type="primary",width="stretch")
+        st.caption("Browser downloads use your browser's save settings. To choose a local folder here, use Save to folder below.")
+        with st.form("save_assistant_brief"):
+            save_folder=st.text_input("Save folder",value=str(ROOT/"data"/"packages"),key="assistant_save_folder",help="A folder on this computer. You can enter ~/Downloads/Lacuna or another absolute path. Missing folders are created.")
+            save_brief=st.form_submit_button("Save to folder",width="stretch")
+        if save_brief:
+            try:
+                if not save_folder.strip():raise ValueError("Enter a save folder.")
+                saved_brief=save_assistant_document(result,save_folder.strip(),compact=compact_brief)
+                st.success("Assistant brief saved.")
+                st.code(str(saved_brief),language=None)
+            except (OSError,ValueError) as exc:errors(exc)
+        with st.expander("Preview / copy the complete assistant brief"):
+            st.code(brief,language=None)
+        with st.expander("Optional technical exports"):
+            a,b,c=st.columns(3)
+            a.download_button("Full package .zip",st.session_state.full_package,f"lacuna_{result.run_id}.zip","application/zip",width="stretch")
+            b.download_button("Compact package .zip",st.session_state.compact_package,f"lacuna_{result.run_id}_compact.zip","application/zip",width="stretch")
+            c.download_button("Result .json",result.model_dump_json(indent=2),f"lacuna_{result.run_id}.json","application/json",width="stretch")
+    st.caption("Original PDFs and credentials are excluded. Source excerpts may contain private research; review the brief before sharing.")
 
 with runs_tab:
     st.subheader("Local run store")

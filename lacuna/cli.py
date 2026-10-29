@@ -20,7 +20,7 @@ from . import APP_NAME, __version__
 from .models import ResearchProfile, ResearchRequest, RunConfig
 from .specification import parse_request, request_template, example_request, input_prompt, write_specification_files, field_gap_request
 from .pipeline import run_research
-from .export import build_package
+from .export import build_package, save_assistant_document
 from .branches import topic_branch_request, branch_report, branch_svg, branch_tree, tree_lines, rich_tree
 
 console = Console(stderr=True, theme=Theme({"accent": "bright_cyan", "muted": "grey70"}), highlight=False)
@@ -231,6 +231,8 @@ def load_inputs(paths, base: Path, extensions):
 
 def execute(request: ResearchRequest, *, base=None, out=Path("data/packages"), db=Path("data/research.sqlite"), extra_pdfs=None, extra_records=None, offline=False, quiet=False):
     base = base or Path.cwd()
+    out = Path(out).expanduser().resolve()
+    out.mkdir(parents=True, exist_ok=True)
     request = resolve_inputs(request, base)
     request.inputs.pdfs.extend(str(Path(raw).expanduser().resolve()) for raw in (extra_pdfs or []))
     request.inputs.records.extend(str(Path(raw).expanduser().resolve()) for raw in (extra_records or []))
@@ -254,6 +256,9 @@ def execute(request: ResearchRequest, *, base=None, out=Path("data/packages"), d
         result = run_research(request.profile, config, pdfs=pdfs, imports=records, db_path=db,
                               openalex_key=os.getenv("OPENALEX_API_KEY", ""), core_key=os.getenv("CORE_API_KEY", ""),
                               progress=lambda fraction, message: progress.update(task, completed=fraction*100, description=message))
+    assistant_path = save_assistant_document(result, out)
+    save_folder = out
+    out = out / "technical" / result.run_id
     out.mkdir(parents=True, exist_ok=True)
     full = out / f"lacuna_{result.run_id}.zip"
     compact = out / f"lacuna_{result.run_id}_compact.zip"
@@ -266,7 +271,8 @@ def execute(request: ResearchRequest, *, base=None, out=Path("data/packages"), d
     save_json(request_path, saved_request)
     summary = {"status": "complete" if not result.warnings else "complete_with_notes", "run_id": result.run_id,
                "studies": len(result.studies), "coverage": result.coverage,
-               "artifacts": {"package": str(full.resolve()), "compact_package": str(compact.resolve()),
+               "save_folder": str(save_folder),
+               "artifacts": {"assistant_document": str(assistant_path), "package": str(full.resolve()), "compact_package": str(compact.resolve()),
                              "result_json": str(result_path.resolve()), "request_json": str(request_path.resolve())},
                "warnings": result.warnings}
     if config.analysis_mode == "field_gaps":
@@ -287,6 +293,8 @@ def execute(request: ResearchRequest, *, base=None, out=Path("data/packages"), d
         summary["topic_branches"]=result.topic_branches
         summary["artifacts"].update(branch_paths)
     if not quiet:
+        console.print(Text(f"\nSend this single file to your assistant:\n{assistant_path}"),style="bold green")
+        console.print("Optional JSON and ZIP files are in the technical subfolder.",style="muted")
         table = Table(title="Discovery complete", box=None)
         table.add_column("artifact", style="accent")
         table.add_column("path")
@@ -350,11 +358,11 @@ def interactive_menu():
     else:
         raise ValueError("Choose one of the listed options.")
     console.print("Validated / " + request.profile.title, style="green", markup=False)
-    out = Path(ask("Output directory", "data/packages"))
-    saved = out / "request.json"
+    out = Path(ask("Save folder (supports ~/Downloads/Lacuna or an absolute path)", "data/packages")).expanduser().resolve()
+    saved = out / "technical" / "request.json"
     if saved.exists():
         from uuid import uuid4
-        saved = out / f"request_{uuid4().hex[:8]}.json"
+        saved = saved.with_name(f"request_{uuid4().hex[:8]}.json")
     save_json(saved, resolve_inputs(request, base))
     console.print(f"Request saved: {saved}", markup=False)
     if ask("Run discovery now? y/n", "y").lower() in {"y", "yes"}:

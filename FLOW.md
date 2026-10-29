@@ -74,3 +74,7 @@ flowchart TD
 ## Topic branching
 
 Topic input → bounded OpenAlex publication search → aggregate primary-topic IDs → fetch domain/field/subfield/topic paths and siblings → show alternative placements → shared tree → web SVG, terminal Rich tree, JSON/Markdown/SVG/text exports. A direct taxonomy search is the labeled fallback when publications provide no usable topic. `branches.py` owns retrieval, provenance and both renderers. Query attachment is inferred; source hierarchy edges are documented taxonomy relationships.
+
+## Assistant handoff
+
+All analysis modes → shared evidence selection → self-contained UTF-8 assistant brief (prompt + profile + coverage + findings + evidence + source catalogue) → selected local folder or browser download/copy. Terminal supporting JSON/ZIP files are grouped under `technical/<run-id>/`; archives also include `SEND_TO_ASSISTANT.md`. Local save uses exclusive creation so existing briefs remain intact.
