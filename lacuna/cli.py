@@ -229,7 +229,7 @@ def load_inputs(paths, base: Path, extensions):
     return result
 
 
-def execute(request: ResearchRequest, *, base=None, out=Path("data/packages"), db=Path("data/research.sqlite"), extra_pdfs=None, extra_records=None, offline=False, quiet=False):
+def execute(request: ResearchRequest, *, base=None, out=Path("data/packages"), db=Path("data/research.sqlite"), extra_pdfs=None, extra_records=None, offline=False, quiet=False, simple_ui=False):
     base = base or Path.cwd()
     out = Path(out).expanduser().resolve()
     out.mkdir(parents=True, exist_ok=True)
@@ -248,7 +248,7 @@ def execute(request: ResearchRequest, *, base=None, out=Path("data/packages"), d
     if "oai" in config.sources and not config.oai_url:
         raise ValueError("oai_url is required when the oai source is selected.")
     if not quiet:
-        banner()
+        if not simple_ui:banner()
         console.print(request.profile.title, style="bold", markup=False)
     progress = Progress(SpinnerColumn(), TextColumn("{task.description}"), BarColumn(), TaskProgressColumn(), console=console, disable=quiet)
     with progress:
@@ -295,12 +295,13 @@ def execute(request: ResearchRequest, *, base=None, out=Path("data/packages"), d
     if not quiet:
         console.print(Text(f"\nSend this single file to your assistant:\n{assistant_path}"),style="bold green")
         console.print("Optional JSON and ZIP files are in the technical subfolder.",style="muted")
-        table = Table(title="Discovery complete", box=None)
-        table.add_column("artifact", style="accent")
-        table.add_column("path")
-        for name, path in summary["artifacts"].items():
-            table.add_row(name, path)
-        console.print(table)
+        if not simple_ui:
+            table = Table(title="Discovery complete", box=None)
+            table.add_column("artifact", style="accent")
+            table.add_column("path")
+            for name, path in summary["artifacts"].items():
+                table.add_row(name, path)
+            console.print(table)
         if config.analysis_mode != "topic_branches":
             console.print(f"[muted]{len(result.studies)} records. Proximity is not a novelty probability.[/muted]")
         if config.analysis_mode == "field_gaps":
@@ -325,51 +326,8 @@ def web(port=8501):
 
 
 def interactive_menu():
-    banner()
-    menu = Table(box=None, show_header=False, padding=(0, 2))
-    for key, label in [("1", "Paste an assistant-filled JSON request"), ("2", "Enter a research specification step by step"),
-                       ("3", "Print the input prompt for your assistant"), ("4", "Run a saved JSON request"),
-                       ("5", "Open the local web interface"), ("6", "Find open questions in a field from theses"), ("7", "Map a specific topic to its research branches"), ("0", "Exit")]:
-        menu.add_row(f"[accent]{key}[/accent]", label)
-    console.print(menu)
-    choice = ask("Choose", "1")
-    if choice == "0":
-        return 0
-    if choice == "3":
-        print(input_prompt())
-        console.print("[muted]Send the prompt above to your assistant, then paste its completed JSON below.[/muted]")
-    if choice == "5":
-        return web()
-    if choice in {"1", "3"}:
-        request, base = read_pasted_json(), Path.cwd()
-    elif choice == "2":
-        request, base = guided_request(), Path.cwd()
-    elif choice == "4":
-        request, base = read_request(ask("Request JSON path", required=True))
-    elif choice == "7":
-        request=topic_branch_request(ask("Specific research topic",required=True))
-        base=Path.cwd()
-    elif choice == "6":
-        request=field_gap_request(ask("Research field / topic",required=True))
-        request.inputs.pdfs=split_terms(ask("Local thesis PDF paths (optional)"))
-        request.inputs.records=split_terms(ask("Local thesis CSV/JSON record paths (optional)"))
-        request.config.local_documents_are_theses=bool(request.inputs.pdfs)
-        base=Path.cwd()
-    else:
-        raise ValueError("Choose one of the listed options.")
-    console.print("Validated / " + request.profile.title, style="green", markup=False)
-    out = Path(ask("Save folder (supports ~/Downloads/Lacuna or an absolute path)", "data/packages")).expanduser().resolve()
-    saved = out / "technical" / "request.json"
-    if saved.exists():
-        from uuid import uuid4
-        saved = saved.with_name(f"request_{uuid4().hex[:8]}.json")
-    save_json(saved, resolve_inputs(request, base))
-    console.print(f"Request saved: {saved}", markup=False)
-    if ask("Run discovery now? y/n", "y").lower() in {"y", "yes"}:
-        emit(execute(request, base=base, out=out))
-    else:
-        emit(request.model_dump())
-    return 0
+    from .terminal_ui import run_workbench
+    return run_workbench()
 
 
 def parser_for_cli():

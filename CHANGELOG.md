@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0
+
+- Add a persistent numbered terminal workbench with task descriptions, short topic flows, review settings and completion actions.
+- Remember the selected save folder locally and show an exact replay command for every run.
+- Group JSON and detailed options under Advanced; keep explicit CLI JSON contracts unchanged.
+- Add double-click Lacuna.command and Lacuna.bat launchers and an in-app command guide.
+
 ## 0.6.0
 
 - Make a self-contained assistant Markdown brief the primary export, with embedded instructions, provenance, evidence and coverage.

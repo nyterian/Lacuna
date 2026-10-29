@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "field-lacuna"
-version = "0.6.0"
+version = "0.7.0"
 description = "Field specific lacuna identifier: reproducible literature discovery"
 readme = "README.md"
 requires-python = ">=3.10"

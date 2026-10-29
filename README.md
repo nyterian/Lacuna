@@ -22,8 +22,8 @@ Launchers install missing dependencies into a project-local `.venv`:
 
 | Platform | Terminal | Local web |
 |---|---|---|
-| macOS | `start-terminal.command` | `start-web.command` |
-| Windows | `start-terminal.bat` | `start-web.bat` |
+| macOS | `Lacuna.command` (double-click) | `start-web.command` |
+| Windows | `Lacuna.bat` (double-click) | `start-web.bat` |
 | Linux | `bash setup.sh`, then `.venv/bin/python -m lacuna` | `.venv/bin/python -m lacuna web` |
 
 First-time setup needs network access to the Python package registry. Launchers honor `LACUNA_PYTHON` on macOS/Linux if a specific interpreter is needed.
@@ -34,15 +34,18 @@ First-time setup needs network access to the Python package registry. Launchers 
 lacuna
 ```
 
-The interactive menu provides:
+The numbered workbench provides:
 
-1. Paste an assistant-prepared request JSON.
-2. Enter the specification field by field.
-3. Print the preparation prompt, then wait for the assistant's completed JSON.
-4. Run a saved request file.
-5. Start the local web interface.
-6. Find author-reported field-gap candidates in theses.
-7. Map a specific topic to its research branches.
+1. **Compare research** — enter a topic, scope and optional keywords.
+2. **Find field gaps** — enter a field to inspect thesis limitations and future work.
+3. **Map topic branches** — locate a specific topic within its research hierarchy.
+4. **Open web interface** — start the browser workspace.
+5. **Save folder** — choose an output folder and remember it across launches.
+6. **Help and command guide** — see command examples and what each does.
+7. **Advanced tools** — paste assistant JSON, load saved requests, use the detailed wizard or get the input prompt.
+0. **Exit**.
+
+Each selection explains its effect. Before a run, a review screen shows the topic, sources, file counts and save folder; numbered actions change the folder, adjust limits or add files. After completion, open the output folder or display the exact rerun command. Interactive runs do not dump result JSON into the menu. Explicit subcommands retain machine-readable stdout.
 
 Input is parsed as JSON, never executed as shell code. The interactive paste editor uses raw terminal input and bracketed paste, bypassing the operating system's per-line input buffer. Paste the entire JSON, then press Enter to submit. Enter adds a line while JSON is incomplete. Ctrl+D submits for validation; Ctrl+C cancels and restores the terminal. Markdown JSON fences are tolerated. Piped input retains its line-based automatic acceptance behavior. The request still has a 1 MB total size limit and schema field limits.
 
@@ -294,3 +297,9 @@ The Artifacts tab defaults to a concise self-contained Markdown brief. Choose Ex
 Use **Save folder → Save to folder** to write the single brief to a folder on the computer running the local web app. Enter an absolute path or `~/Downloads/Lacuna`; missing folders are created, and repeated saves receive a suffix instead of overwriting earlier exports. Browser downloads follow browser save settings independently. The complete brief is also available in the copyable preview.
 
 Attachment/context limits vary between assistants. The interface shows document size; concise mode reduces the detailed study portfolio but does not silently truncate gap evidence. Long field-gap/source catalogues can still exceed an assistant's context. Technical JSON and ZIP downloads remain optional under their expander.
+
+## Opening the terminal workbench (0.7.0)
+
+On macOS, double-click **Lacuna.command** in the project folder. On Windows, double-click **Lacuna.bat**. Existing start-terminal launchers still work. First launch installs missing dependencies; subsequent launches reuse the environment. macOS security or execution permissions may require opening the launcher from Terminal on first use.
+
+The save folder preference is stored locally in `data/terminal-settings.json` and is not published. Defaults remain project-local until changed. Inputs and source credentials are not stored in this preferences file. Use menu 6 for the command guide. Use Ctrl+C to cancel an action and return to the menu; use 0 to exit.
